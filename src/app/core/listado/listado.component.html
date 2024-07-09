@@ -2,6 +2,53 @@
 <!-- CARDS -->
 <div class="col-12 mt-3">
     <div class="row">
+        <div class="col-12 mt-3 mb-3">
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-header-card">
+                    <div class="card-title text-light fw-bold fs-4">
+                        Buscar...
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="_search_formGroup" class="row g-3 needs-validation" novalidate>
+                        <div class="input-group mb-3 has-validation">
+                            <input [ngClass]="{'is-invalid': _search_formGroup.get('_query')!.errors != null && _search_formGroup.get('_query')!.touched}" type="text" class="form-control" formControlName="_query">
+                            <button (click)="_search()" class="btn btn-info text-light" role="button" [ngClass]="{'bg-danger': _search_formGroup.get('_query')!.errors != null && _search_formGroup.get('_query')!.touched}">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <span class="text-danger invalid-feedback" *ngIf="_search_formGroup.get('_query')!.errors != null && (_search_formGroup.get('_query')!.touched || _search_formGroup.get('_query')!.dirty)">
+                                <ng-container *ngIf="_search_formGroup.get('_query')!.errors!['maxlength']; else req">
+                                The maximum required length is {{_search_formGroup.get('_query')!.errors!['maxlength']?.requiredLength}} characters.
+                                </ng-container>
+                                <ng-template #req>
+                                Is required
+                                </ng-template>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <!-- LOADING -->
+                    <div class="text-center" *ngIf="_loading_search">
+                        <div class="spinner-border text-info fs-3" style="width: 5rem; height: 5rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-danger d-flex align-items-center text-wrap" role="alert"  *ngIf="_search_text && !_loading_search">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                        &nbsp;{{_search_text}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12" *ngIf="_listado.length == 0">
+            <div class="alert alert-info" role="alert">
+                No hay datos para mostrar
+            </div>
+        </div>
         <ng-container *ngFor="let list of _listado; let index = index;">
             <div class="col-lg-4 col-md-6 wow fadeInUp mb-2 p-3" data-wow-delay="0.1s">
                 <app-card-information-view [_dataPost]="list"></app-card-information-view>

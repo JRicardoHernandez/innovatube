@@ -37,4 +37,8 @@ export class AuthService {
     return this.http.post<IUser[]>(`${this._base_api}/getUserByEmail`, {email},{ headers: headers});
   }
 
+  sendToken(token: string){
+    return this.http.post<any>(`${this._base_api}/reCaptcha`,  {recaptcha: token});
+  }
+
 }

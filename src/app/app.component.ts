@@ -38,6 +38,7 @@ export class AppComponent {
   // Data User
   _user_data: IUser = {} as IUser;
   _user_data_response: any = {};
+  _valid_captcha: boolean = false;
 
   constructor(
     private _AuthService: AuthService
@@ -66,6 +67,7 @@ export class AppComponent {
       email: new FormControl(null, [Validators.required, Validators.maxLength(120), Validators.email]), // OK
       password: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(16)]), // OK
       repeat_password: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(16)]), // OK
+      recaptchaReactive:  new FormControl(null, Validators.required)
       // remember: new FormControl(null), // OK
     });
     this._resetPasswordFormGroup = new FormGroup({
@@ -168,7 +170,11 @@ export class AppComponent {
   }
 
   register() {
-    if (this._registerFormGroup.invalid) {return}
+    if (!this._valid_captcha) {return}
+    if (this._registerFormGroup.invalid) {
+      this._registerFormGroup.markAllAsTouched();
+      return
+    }
     if (this._registerFormGroup.value.password != this._registerFormGroup.value.repeat_password) {
       Swal.fire({
         icon: "error",
@@ -288,5 +294,36 @@ export class AppComponent {
       }
     });
   }
+
+  resolved(captchaRes: any) {
+    console.log(`Resolved response token: ${captchaRes}`);
+    if (!captchaRes) {return}
+    this._valid_captcha = false;
+    this._AuthService.sendToken(captchaRes)
+    .subscribe({
+      next: x => {
+        Swal.fire({
+          icon: "success",
+          title: "Captcha",
+          text: x.responseDesc
+        });
+        console.log(x);
+        this._valid_captcha = true;
+        
+      },
+      error: err => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: err.error.responseDesc,
+        });
+        console.log(err);
+        
+      },
+      complete: () => {
+        console.log('Captcha');
+      }
+    });
+ }
 
 }

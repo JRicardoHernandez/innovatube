@@ -14,8 +14,8 @@ export class YoutubeApiService {
     private http: HttpClient
   ) { }
 
-  _getListYoutube(params: string = "&part=snippet&order=viewCount&q=skateboarding+dog&type=video&videoDefinition=high") {
-    return this.http.get<any>(`${this._base_api}${params}`);
+  _getListYoutube(params: string) {
+    return this.http.get<any>(`${this._base_api}&q=${params}"&order=viewCount&type=video&videoDefinition=high"`);
   }
 
   _createFavorite(body: IFavorite) {

@@ -150,7 +150,7 @@
                       </small>
                     </div>
                   </div>
-                  <div class="d-flex mt-0 mb-4 justify-content-center">
+                  <div class="d-flex mt-0 mt-4 mb-4 justify-content-center">
                     <!-- <div class="form-check form-switch flex-grow-1">
                       <input class="form-check-input" type="checkbox" role="switch" id="rememberSwitchCheck">
                       <label class="form-check-label" for="rememberSwitchCheck">¡Remember Me!</label>
@@ -160,7 +160,7 @@
                     </a>
                   </div>
                   <div class="d-grid gap-2 col-12 mx-auto">
-                    <button class="btn bg-header-card text-light" type="button"  [disabled]="_loginForm_loading" (click)="login()">
+                    <button class="btn bg-header-card text-light" type="button"  [disabled]="_loginForm_loading" (click)="login()" onclick="onClickBtn(event)">
                       <div class="spinner-border" role="status" *ngIf="_loginForm_loading">
                         <span class="visually-hidden">Loading...</span>
                       </div>
@@ -288,6 +288,12 @@
                       </small>
                     </div>
                   </div>
+                  <div class="d-flex mt-0 mt-4 mb-4 justify-content-center">
+                    <re-captcha (resolved)="resolved($event)"
+                        formControlName="recaptchaReactive"
+                        siteKey="6LeJNAwqAAAAAN6j4G5tBho07gAE1jfxcspunSh6">
+                    </re-captcha>
+                  </div>
                   <div class="alert alert-danger d-flex align-items-center text-wrap" role="alert" *ngIf="_registerForm_error && _registerForm_error_message">
                     <span class="material-icons-outlined">
                       warning
@@ -297,7 +303,7 @@
                     </div>
                   </div>
                   <div class="d-grid gap-2 col-12 mx-auto">
-                    <button class="btn bg-header-card text-light" type="button"  [disabled]="_registerForm_loading" (click)="register()">
+                    <button class="btn bg-header-card text-light" type="button"  [disabled]="_registerForm_loading || !_valid_captcha || _registerFormGroup.get('recaptchaReactive')!.errors " (click)="register()">
                       <div class="spinner-border" role="status" *ngIf="_registerForm_loading">
                         <span class="visually-hidden">Loading...</span>
                       </div>
