@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ListadoModule } from './core/listado/listado.module';
+import { ListadoComponent } from './listado.component';
 
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => ListadoModule
-  },
+    component: ListadoComponent
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class ListRoutingModule { }

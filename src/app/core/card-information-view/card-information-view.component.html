@@ -1,0 +1,62 @@
+
+<div class="card shadow-sm">
+  <div class="ribbon ribbon-top-right" style="z-index: 99;">
+      <span class="bg-header-card">
+          _details._detail_PROPIETARIO[_language][_dataPost.propietario]
+      </span>
+  </div>
+    <div class="property-item rounded overflow-hidden">
+      <div class="position-relative overflow-hidden">
+        <div class="container-img border rounded">
+          <!-- <img class="img-fluid pic-img" [src]="_dataPost.imagenes? _dataPost.imagenes[0]? _dataPost.imagenes[0].src ? _dataPost.imagenes[0].src.includes('firebasestorage')? _dataPost.imagenes[0].src :defaultImg :defaultImg :defaultImg :defaultImg" alt="{{_dataPost.titulo}}"
+          [routerLink]="['/detail/', _dataPost._id]" role="button" routerLinkActive="router-link-active"> -->
+        </div>
+        <div class="bg-info rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+          Tipo
+        </div>
+        <div class="bg-white rounded-top bg-header-text position-absolute start-0 bottom-0 mx-4 pt-1 px-3 fw-bold">
+          Categoria
+        </div>
+      </div>
+      <div class="p-4 pb-0">
+        <div class="row">
+          <div [ngClass]="{'col-12': !_shared_card, 'col-10': _shared_card}">
+            <h2 class="bg-header-text mb-3 fs-2 text-truncate"><span class="material-icons fs-6">euro</span>&nbsp;123</h2>
+          </div>
+        </div>
+        <a class="d-block h5 mb-2 text-truncate bg-header-text" [routerLink]="['/detail/', 1]"
+        routerLinkActive="router-link-active" style="width: 90%;">Titulo</a>
+        <button *ngIf="_show_totalStars" type="button" class="btn bg-header-card text-light m-2 border-1 shadow-sm fs-6 p-2">
+          <span class="material-icons fs-4 text-warning">star</span>
+          <strong>{{_totalStars | number : '1.0-1'}}</strong>
+        </button>
+        <h6 *ngIf="_show_id">
+          <span class="material-icons-outlined fs-5 text-info">fingerprint</span>&nbsp;<div class="badge text-bg-info fs-6 text-light">_dataPost._id</div>
+        </h6>
+        <div class="badge badge-pill bg-info m-2">
+          Tiempo
+        </div>
+        <br>
+        <p>
+          <span class="material-icons bg-header-text text-truncate">place</span>city
+        </p>
+      </div>
+      <div class="d-flex">
+        <small class="flex-fill text-center border-primary border-1 py-2 fw-bold border-start-0 border-end-0 border-bottom-0" style="border-style: dashed;">
+          <span class="material-icons text-info">square_foot</span>&nbsp;<span class="bg-header-text fw-bold">32&nbsp;m<sup>2</sup></span>
+        </small>
+        <small class="flex-fill text-center border-primary border-1 py-2 fw-bold border-bottom-0" style="border-style: dashed;">
+          <span class="material-icons text-info">bed</span>
+          &nbsp;<span class="bg-header-text fw-bold">15</span>
+        </small>
+        <small class="flex-fill text-center border-primary border-1 py-2 fw-bold border-start-0 border-end-0 border-bottom-0" style="border-style: dashed;">
+          <span class="material-icons text-info">bathtub</span>
+          &nbsp;<span class="bg-header-text fw-bold">15</span>
+        </small>
+      </div>
+      <div *ngIf="_search_card" class="card-footer text-center">
+        <div class="btn btn-warning" [routerLink]="['/detail/', 2]"
+        routerLinkActive="router-link-active">View Details</div>
+      </div>
+    </div>
+  </div>

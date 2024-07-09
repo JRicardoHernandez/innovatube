@@ -1,25 +1,36 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar w/ text</a>
+    <a class="navbar-brand" href="/">{{title}}</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarText">
+    <div class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
       </ul>
       <span class="navbar-text">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown m-2 rounded text-dark" style="background-color: transparent !important;">
+          <li *ngIf="!isLogged" class="nav-item dropdown m-2 rounded text-dark" style="background-color: transparent !important;">
+            <div class="btn-group btn-full" role="group">
+              <button type="button" class="btn btn-light">
+                Recuperar Contrase&ntilde;a
+              </button>
+              <button class="btn btn-outline-primary" type="button" (click)="changeTab('recuperar')" data-bs-toggle="modal" data-bs-target="#auth">
+                <i class="fas fa-unlock-alt"></i>
+              </button>
+            </div>
+          </li>
+          <li *ngIf="isLogged" class="nav-item dropdown m-2 rounded text-dark" style="background-color: transparent !important;">
+            <div class="btn-group btn-full" role="group">
+              <button type="button" class="btn btn-light">
+                {{_user_data.displayName}}
+              </button>
+              <button class="btn btn-outline-danger" type="button" (click)="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+              </button>
+            </div>
+          </li>
+          <li *ngIf="!isLogged" class="nav-item dropdown m-2 rounded text-dark" style="background-color: transparent !important;">
             <div class="btn-group btn-full" role="group">
               <button type="button" class="btn btn-success">
                 <i class="fas fa-sign-in-alt"></i>
@@ -29,10 +40,10 @@
               </button>
             </div>
           </li>
-          <li class="nav-item dropdown m-2 rounded text-dark" style="background-color: transparent !important;">
+          <li *ngIf="!isLogged" class="nav-item dropdown m-2 rounded text-dark" style="background-color: transparent !important;">
             <div class="btn-group btn-full" role="group">
               <button type="button" class="btn btn-warning">
-                <i class="fas fa-sign-in-alt"></i>
+                <i class="fas fa-user-plus"></i>
               </button>
               <button class="btn btn-outline-warning" type="button" (click)="changeTab('registrar')" data-bs-toggle="modal" data-bs-target="#auth">
                 Registrarse
@@ -52,22 +63,7 @@
 <!-- Modal -->
 <div class="modal fade" id="auth" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="authLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content p-3" *ngIf="isLogged">
-      <div class="row">
-        <div class="col-12">
-          <div class="alert rounded m-2 p-3 alert-warning">
-            <span class="material-icons-outlined">
-              warning
-            </span>
-            Es necesario Iniciar Sesi&oacute;n o Registrarse
-          </div>
-        </div>
-        <div class="col-12 text-center">
-          <button id="modalLoginRegister" type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal" aria-label="Close">"button_close"|</button>
-        </div>
-      </div>
-    </div>
-    <div class="modal-content" *ngIf="!isLogged">
+    <div class="modal-content">
       <div class="modal-header pb-0 border border-bottom-0">
         <h1 class="modal-title fs-5" id="authLabel">
           <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -154,28 +150,6 @@
                       </small>
                     </div>
                   </div>
-                  <label for="email_login show-input-mobile mt-3">
-                    Confirmar Contrase&ntilde;a
-                  </label>
-                  <div class="input-group mb-5">
-                    <span class="input-group-text bg-primary text-light hide-input-mobile">
-                      <i class="fas fa-lock"></i>
-                    </span>
-                    <input [type]="_loginForm_show_repeat_password ? 'text' : 'password'" class="form-control" placeholder="Confirmar Contraseña" aria-label="Confirm Password" formControlName="repeat_password" name="repeat_password" [ngClass]="{'is-invalid': _loginFormGroup.get('repeat_password')!.errors != null && _loginFormGroup.get('repeat_password')!.touched}">
-                    <span class="input-group-text bg-primary text-light" role="button" (click)="change_loginForm_show_repeat_password(true)" *ngIf="_loginForm_show_repeat_password == false;">
-                      <i class="fas fa-eye"></i>
-                    </span>
-                    <span class="input-group-text bg-primary text-light" role="button" (click)="change_loginForm_show_repeat_password(false)" *ngIf="_loginForm_show_repeat_password;">
-                      <i class="fas fa-eye-slash"></i>
-                    </span>
-                    <div class="invalid-feedback" *ngIf="_loginFormGroup.get('repeat_password')!.errors != null && _loginFormGroup.get('repeat_password')!.touched">
-                      <small>
-                        <span class="text-danger">
-                          Is required
-                        </span>
-                      </small>
-                    </div>
-                  </div>
                   <div class="d-flex mt-0 mb-4 justify-content-center">
                     <!-- <div class="form-check form-switch flex-grow-1">
                       <input class="form-check-input" type="checkbox" role="switch" id="rememberSwitchCheck">
@@ -184,14 +158,6 @@
                     <a (click)="changeTab('recuperar')" role="button" class="link-dark link-offset-2 link-opacity-50 link-opacity-100-hover link-underline-opacity-10">
                       ¿Olvidaste tu Contrase&ntilde;a?
                     </a>
-                  </div>
-                  <div class="alert alert-danger d-flex align-items-center text-wrap" role="alert" *ngIf="_loginForm_error && _loginForm_error_message">
-                    <span class="material-icons-outlined">
-                      warning
-                    </span>
-                    <div>
-                      &nbsp;{{_loginForm_error_message}}
-                    </div>
                   </div>
                   <div class="d-grid gap-2 col-12 mx-auto">
                     <button class="btn bg-header-card text-light" type="button"  [disabled]="_loginForm_loading" (click)="login()">
@@ -203,14 +169,6 @@
                       </ng-container>
                       &nbsp;&nbsp;Iniciar Sesi&oacute;n
                     </button>
-                  </div>
-                  <div class="alert alert-danger d-flex align-items-center text-wrap" role="alert" *ngIf="_loginForm_error && _loginForm_error_message">
-                    <span class="material-icons-outlined">
-                      warning
-                    </span>
-                    <div>
-                      &nbsp;{{_loginForm_error_message}}
-                    </div>
                   </div>
                 </form>
               </div>
