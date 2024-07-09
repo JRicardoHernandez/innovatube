@@ -286,17 +286,14 @@ export class AppComponent {
     this._AuthService._getCurrentUser(mail+"")
     .subscribe({
       next: x => {
-        this._user_data = x[0];
+        this._user_data = x;
       },
-      error: err => console.log(err),
-      complete: () => {
-        console.log('Data user');
-      }
+      error: err => {},
+      complete: () => {}
     });
   }
 
   resolved(captchaRes: any) {
-    console.log(`Resolved response token: ${captchaRes}`);
     if (!captchaRes) {return}
     this._valid_captcha = false;
     this._AuthService.sendToken(captchaRes)
@@ -307,9 +304,7 @@ export class AppComponent {
           title: "Captcha",
           text: x.responseDesc
         });
-        console.log(x);
         this._valid_captcha = true;
-        
       },
       error: err => {
         Swal.fire({
@@ -317,12 +312,8 @@ export class AppComponent {
           title: "Oops...",
           text: err.error.responseDesc,
         });
-        console.log(err);
-        
       },
-      complete: () => {
-        console.log('Captcha');
-      }
+      complete: () => {}
     });
  }
 

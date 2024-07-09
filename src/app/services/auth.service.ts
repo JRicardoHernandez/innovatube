@@ -34,7 +34,7 @@ export class AuthService {
   _getCurrentUser(email: string) {
     let headers: any = new Headers();
     headers.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`);
-    return this.http.post<IUser[]>(`${this._base_api}/getUserByEmail`, {email},{ headers: headers});
+    return this.http.post<IUser>(`${this._base_api}/getUserByEmail`, {email},{ headers: headers});
   }
 
   sendToken(token: string){

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IFavorite } from 'src/app/interfaces/user-data.interfaces';
 import { YoutubeApiService } from 'src/app/services/youtube-api.service';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-card-information-view',
@@ -23,15 +24,11 @@ export class CardInformationViewComponent implements OnInit {
     this._YoutubeService._getFavorite({_id: this._dataPost.id.videoId})
     .subscribe({
       next: x => {
-        console.log(x, this._dataPost.id.videoId);
-        this._favorito_data = x[0];
+        this._favorito_data = x;
         this._favorito = true;
       },
-      error: err => {
-        // console.log(err);
-      },
-      complete: () => {
-      }
+      error: err => {},
+      complete: () => {}
     });
   }
 
@@ -44,30 +41,46 @@ export class CardInformationViewComponent implements OnInit {
     this._YoutubeService._createFavorite(this._favorito_data)
     .subscribe({
       next: x => {
-        console.log(x);
+        Swal.fire({
+          icon: "success",
+          title: "Favoritos",
+          text: "Se agrego a tus favoritos"
+        });
+        this._favorito = true;
+        this._favorito_data._id = x._id;
       },
       error: err => {
-        console.log(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: err.error.error,
+        });
       },
-      complete: () => {
-      }
+      complete: () => {}
     });
   }
   
   deleteFavorite(id: string) {
-    console.log(id, this._favorito_data);
-    
-    if (this._favorito_data._id!='') {return}
+    if (this._favorito_data._id=='') {return}
     this._YoutubeService._deleteFavorite(this._favorito_data)
     .subscribe({
       next: x => {
-        console.log(x);
+        Swal.fire({
+          icon: "success",
+          title: "Favoritos",
+          text: "Se ELIMINÓ de tus favoritos"
+        });
+        this._favorito = false;
+        this._favorito_data = {} as IFavorite;
       },
       error: err => {
-        console.log(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: err.error.error,
+        });
       },
-      complete: () => {
-      }
+      complete: () => {}
     });
   }
 
