@@ -27,3 +27,9 @@ export interface IAuthLogout {
 export interface IAuthResetPassword {
     email: string
 }
+
+export interface IFavorite {
+    _id?: string,
+    user: string,
+    _id_video: string
+}

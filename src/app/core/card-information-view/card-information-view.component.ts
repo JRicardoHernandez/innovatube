@@ -1,35 +1,74 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { IFavorite } from 'src/app/interfaces/user-data.interfaces';
+import { YoutubeApiService } from 'src/app/services/youtube-api.service';
 
 @Component({
   selector: 'app-card-information-view',
   templateUrl: './card-information-view.component.html',
   styleUrls: ['./card-information-view.component.scss']
 })
-export class CardInformationViewComponent {
-  @Input() _dataPost = {};
+export class CardInformationViewComponent implements OnInit {
+  @Input() _dataPost: any = {};
   defaultImg: string = '../../../assets/images/no-image-icon.png';
   _blank_field: string = '---';
-  // INPUT DATA
-  @Input() _currentIndex: number = 0;
-  @Input() _totalStars: number = 0;
-  @Input() _shared_card: boolean = false;
-  @Input() _show_totalStars: boolean = false;
-  @Input() _search_card: boolean = false;
-  @Input() _show_id: boolean = false;
-  // OUTPUT DATA
-  @Output() _function_activePost = new EventEmitter<{id: string|undefined, position: number}>();
-  @Output() _function_deletePost = new EventEmitter<{id: string|undefined, position: number, deletePost: boolean}>();
+  _favorito_data: IFavorite = {} as IFavorite;
+  _favorito: boolean = false;
 
   constructor(
+    private _YoutubeService: YoutubeApiService
   ) {
   }
 
-  activePost(id: string | undefined, position: number) {
-    this._function_activePost.emit({ id: id, position: position });
+  ngOnInit(): void {
+    this._YoutubeService._getFavorite({_id: this._dataPost.id.videoId})
+    .subscribe({
+      next: x => {
+        console.log(x, this._dataPost.id.videoId);
+        this._favorito_data = x[0];
+        this._favorito = true;
+      },
+      error: err => {
+        // console.log(err);
+      },
+      complete: () => {
+      }
+    });
+  }
+
+  createFavorite(id: string) {
+    this._favorito_data = {
+      _id: '',
+      user: localStorage.getItem('email')+"",
+      _id_video: id
+    }
+    this._YoutubeService._createFavorite(this._favorito_data)
+    .subscribe({
+      next: x => {
+        console.log(x);
+      },
+      error: err => {
+        console.log(err);
+      },
+      complete: () => {
+      }
+    });
   }
   
-  deletePost(id: string | undefined, position: number, deletePost: boolean = false) {
-    this._function_deletePost.emit({ id: id, position: position, deletePost: deletePost});
+  deleteFavorite(id: string) {
+    console.log(id, this._favorito_data);
+    
+    if (this._favorito_data._id!='') {return}
+    this._YoutubeService._deleteFavorite(this._favorito_data)
+    .subscribe({
+      next: x => {
+        console.log(x);
+      },
+      error: err => {
+        console.log(err);
+      },
+      complete: () => {
+      }
+    });
   }
 
 }
